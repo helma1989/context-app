@@ -4,7 +4,6 @@ import AuthenticationProvider from "./AuthenticationProvider";
 import Header from "./components/Header";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Logout from "./pages/Logout";
 import ShoppingList from "./pages/ShoppingList";
 import { RequiredAuth } from "./RequiredAuth";
 import { useLoader } from "./LoadContext";

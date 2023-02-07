@@ -50,7 +50,9 @@ export default function AuthenticationProvider({ children }: AuthProps) {
     getLoggedUser();
   }, [setLoading]);
 
+  //this is called when we do the login to keep track of the logged user in the frontend
   const onLogin = (v: any) => setAuthData(v);
+  //when we do the logout the loggedUser data should be removed
   const onLogout = () => setAuthData({ name: "" });
   return (
     <AuthenticationContext.Provider value={{ authData, onLogin, onLogout }}>

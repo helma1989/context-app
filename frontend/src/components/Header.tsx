@@ -15,9 +15,6 @@ const Header = () => {
               <li>
                 <NavLink to="/">Shopping List</NavLink>
               </li>
-              <li>
-                <NavLink to="/logout">Log out</NavLink>
-              </li>
             </>
           ) : (
             <>

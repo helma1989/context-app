@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import { useAuthentication } from "../AuthenticationProvider";
 
 const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const myContext = useAuthentication();
+  const onLogin = myContext?.onLogin;
 
   function submitHandler(e: any) {
     e.preventDefault();
@@ -22,6 +25,7 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
+        if (onLogin) onLogin({ email: data.email, name: data.name });
         navigate("/", { replace: true });
       })
       .catch((error) => console.log(error));

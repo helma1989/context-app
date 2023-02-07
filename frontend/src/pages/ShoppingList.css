@@ -1,0 +1,19 @@
+.tasks {
+  list-style: none;
+  padding: 6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.delete {
+  background-color: rgb(143, 32, 32);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  border: 2px solid brown;
+}
+.delete:hover {
+  background-color: rgb(82, 16, 16);
+}

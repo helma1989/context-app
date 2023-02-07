@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthentication } from "../AuthenticationProvider";
+import "./ShoppingList.css";
 
 export default function ShoppingList() {
   const myContext = useAuthentication();
   const authData = myContext?.authData;
   const onLogout = myContext?.onLogout;
-  const [task, setTask] = useState();
+  const [task, setTask] = useState("");
   const [listItems, setList] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -37,6 +38,54 @@ export default function ShoppingList() {
       .catch((err) => console.log(err));
   }
 
+  function handleChange(event: any) {
+    setTask(event?.target.value);
+  }
+
+  function addTask(event: any) {
+    event?.preventDefault();
+    console.log(task);
+    let exists = listItems.some((item) => item.task === task);
+
+    if (!exists) {
+      const requestOptions: RequestInit = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ task: task }),
+      };
+
+      fetch("tasks/", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          getTasks();
+          setTask("");
+          //   if (onLogout) onLogout();
+          //   navigate("/login");
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function deleteTask(id: string) {
+    console.log(id);
+    const requestOptions: RequestInit = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ _id: id }),
+    };
+
+    fetch("tasks/remove", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        getTasks();
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       {!authData?.name ? (
@@ -52,19 +101,34 @@ export default function ShoppingList() {
             ) : (
               <>
                 <h1>ShoppingList:</h1>
+
                 <ul>
                   {listItems?.map((item: any, index: number) => (
-                    <li key={item.id}>
+                    <li className="tasks" key={item._id}>
                       <span>{item.task}</span>
+                      <button
+                        className="delete"
+                        onClick={() => {
+                          deleteTask(item._id);
+                        }}
+                      >
+                        Delete
+                      </button>
                     </li>
                   ))}
                 </ul>
               </>
             )}
+            <form>
+              <input type="text" value={task} onChange={handleChange}></input>
+              <button type="submit" onClick={addTask}>
+                add task
+              </button>
+            </form>
           </div>
+          <button onClick={logout}>Log out</button>
         </>
       )}
-      <button onClick={logout}>Log out</button>
     </>
   );
 }
